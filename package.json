@@ -1,0 +1,39 @@
+{
+  "name": "social-tracks-api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon --exec babel-node ./bin/www",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~4.1.0",
+    "ejs": "~2.6.1",
+    "express": "~4.16.4",
+    "http-errors": "~1.7.1",
+    "isomorphic-fetch": "^2.2.1",
+    "joi": "^14.3.0",
+    "mongoose": "^5.3.14",
+    "morgan": "~1.9.1",
+    "spotify-web-api-node": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/node": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0",
+    "@babel/plugin-syntax-export-extensions": "^7.0.0-beta.32",
+    "@babel/preset-env": "^7.1.6",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^22.1.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "nodemon": "^1.18.7"
+  }
+}

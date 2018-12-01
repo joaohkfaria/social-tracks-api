@@ -1,0 +1,10 @@
+node_modules
+coverage
+*.swp
+*.swo
+*.log
+logs
+.vs
+playground.js
+npm-debug.log.*
+.DS_Store

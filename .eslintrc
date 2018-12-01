@@ -1,0 +1,13 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "plugins": ["jest"],
+  "env": {"jest": true},
+  "rules": {
+    "no-console": ["error", { "allow": ["info", "warn", "error"] }],
+    "no-underscore-dangle": "off",
+    "import/no-cycle": "off",
+    "camelcase": "off",
+    "import/prefer-default-export": "off"
+  }
+}
