@@ -53,3 +53,14 @@ export async function getSpotifyLibraryTracks(accessToken) {
 
   return savedTracks.body;
 }
+
+export async function queryTracks(accessToken, trackName, artistName) {
+  // Initialize object
+  const spotifyApi = new Spotify();
+  spotifyApi.setAccessToken(accessToken);
+
+  // Getting track
+  const { body } = await spotifyApi.searchTracks(`${artistName}:${trackName}`, { limit: 1 });
+
+  return body;
+}

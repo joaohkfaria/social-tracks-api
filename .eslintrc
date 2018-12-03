@@ -8,6 +8,7 @@
     "no-underscore-dangle": "off",
     "import/no-cycle": "off",
     "camelcase": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "no-await-in-loop": "off"
   }
 }

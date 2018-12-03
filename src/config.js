@@ -29,3 +29,10 @@ if (!SPOTIFY.CLIENT_ID || !SPOTIFY.CLIENT_SECRET || !SPOTIFY.ENCRYPTION_SECRET) 
   console.info('You need to set SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET and SPOTIFY_ENCRYPTION_SECRET in you ENV');
   process.exit(12);
 }
+
+const socialTracksApi = {
+  production: 'http://social-tracks-recommender.now.sh',
+  development: 'http://localhost:8000',
+};
+
+export const SOCIAL_TRACKS_URL = socialTracksApi.development;
