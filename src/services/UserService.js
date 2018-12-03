@@ -55,3 +55,9 @@ export async function addOrUpdateMastodonOnUser(user, mastodonUser) {
   const updatedUser = await user.set({ mastodon_id: mastodonUser.id }).save();
   return updatedUser;
 }
+
+export async function getUsersFromGroup(group) {
+  const users = await User.find({ _id: { $in: group.users } });
+
+  return users;
+}
