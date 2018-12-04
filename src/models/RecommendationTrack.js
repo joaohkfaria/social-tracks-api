@@ -27,7 +27,7 @@ const RecommendationTrack = new Schema({
     type: Boolean,
     required: true,
   },
-  rating: {
+  prediction: {
     type: Number,
     required: true,
   },

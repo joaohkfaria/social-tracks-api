@@ -44,7 +44,7 @@ export async function generateRecommendationTracks(spotifyAccessToken, recommend
     console.info(track);
     const recommendationTrack = await RecommendationTrack.create({
       ...track,
-      rating: recommendation.rating,
+      prediction: recommendation.prediction,
     });
     // Adding to generated recommendations
     generatedRecommendations.push(recommendationTrack);
