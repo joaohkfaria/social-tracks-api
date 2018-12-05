@@ -39,9 +39,10 @@ export async function getSpotifyTopTracks(accessToken) {
   const spotifyApi = new Spotify();
   spotifyApi.setAccessToken(accessToken);
 
-  const topTracks = await spotifyApi.getMyTopTracks({ limit: 50 });
+  const { body } = await spotifyApi.getMyTopTracks({ limit: 50, time_range: 'long_term' });
+  if (!body || !body.items || !body.items.length) throw new Error('No item found Spotify');
 
-  return topTracks.body;
+  return body;
 }
 
 export async function getSpotifyLibraryTracks(accessToken) {
@@ -49,9 +50,10 @@ export async function getSpotifyLibraryTracks(accessToken) {
   const spotifyApi = new Spotify();
   spotifyApi.setAccessToken(accessToken);
 
-  const savedTracks = await spotifyApi.getMySavedTracks({ limit: 50 });
+  const { body } = await spotifyApi.getMySavedTracks({ limit: 50 });
+  if (!body || !body.items || !body.items.length) throw new Error('No item found Spotify');
 
-  return savedTracks.body;
+  return body;
 }
 
 export async function queryTracks(accessToken, trackName, artistName) {

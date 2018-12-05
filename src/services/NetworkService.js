@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch';
+import fetch from 'node-fetch';
 
 export const GET = 'GET';
 export const POST = 'POST';
@@ -39,6 +39,8 @@ export async function request(url, type = GET, path = null, params = null, heade
   if (headers !== null) {
     data.headers = Object.assign(data.headers, headers);
   }
+
+  data.timeout = 99999999;
 
   // Making request
   console.info(`FETCHING: ${ENDPOINT}`);
