@@ -30,23 +30,31 @@ export async function getRecommendations(req, res) {
     }
     // Getting users from group
     const users = await getUsersFromGroup(group);
-    // Getting recommendations from social tracks
-    const { recommendations } = await getSocialTracksRecommendations(users);
-    // Getting spotify songs based on recommendations
-    const recommendationTracks = await generateRecommendationTracks(
-      spotifyAccessToken,
-      recommendations,
-    );
-    // Creating recommendation on DB
-    const createdRecommendation = await Recommendation.create({
-      group,
-      recommendation_tracks: recommendationTracks,
-    });
     // Getting recommendation populated
-    const recommendation = await Recommendation.findOne({ _id: createdRecommendation._id })
-      .populate({ path: 'recommendation_tracks', model: 'RecommendationTrack' }).exec();
+    const recommendation = await Recommendation
+      .findOne({ group })
+      .sort({ created_at: -1 })
+      .populate({ path: 'recommendation_tracks', model: 'RecommendationTrack' })
+      .exec();
 
+    // Responding recommendation to user
     respondSuccess(req, res, { recommendation });
+
+    // Getting recommendation if there's no one saved
+    if (!recommendation) {
+      // Getting recommendations from social tracks
+      const { recommendations } = await getSocialTracksRecommendations(users);
+      // Getting spotify songs based on recommendations
+      const recommendationTracks = await generateRecommendationTracks(
+        spotifyAccessToken,
+        recommendations,
+      );
+      // Creating recommendation on DB
+      await Recommendation.create({
+        group,
+        recommendation_tracks: recommendationTracks,
+      });
+    }
   } catch (error) {
     respondError(res, errorCodes.databaseError, 'Cant get recommendations from DB');
     console.info(error);
