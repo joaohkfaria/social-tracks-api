@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
-import config from '../config';
+import { DB } from '../config';
 
-const mongooseUrl = `mongodb://${config.db.host}:${config.db.port}/${config.db.name}`;
+const mongooseUrl = `mongodb://${DB.HOST}:${DB.PORT}/${DB.NAME}`;
 
 async function connect() {
   console.info(`\nConnecting with MongoDB on ${mongooseUrl}`);
-  await mongoose.connect(mongooseUrl, { useNewUrlParser: true });
+  await mongoose.connect(mongooseUrl, { useNewUrlParser: true, useCreateIndex: true });
 }
 
 async function close() {

@@ -1,9 +1,7 @@
-export default {
-  db: {
-    host: 'localhost',
-    port: 27017,
-    name: 'social_tracks_api',
-  },
+export const DB = {
+  HOST: 'localhost',
+  PORT: 27017,
+  NAME: 'social_tracks_api',
 };
 
 export const MASTODON = {
@@ -30,9 +28,9 @@ if (!SPOTIFY.CLIENT_ID || !SPOTIFY.CLIENT_SECRET || !SPOTIFY.ENCRYPTION_SECRET) 
   process.exit(12);
 }
 
-const socialTracksApi = {
+const SOCIAL_TRACKS_RECOMMENDER_API = {
   production: 'http://social-tracks-recommender.now.sh',
   development: 'http://localhost:8000',
 };
 
-export const SOCIAL_TRACKS_URL = socialTracksApi.development;
+export const SOCIAL_TRACKS_URL = SOCIAL_TRACKS_RECOMMENDER_API.development;
