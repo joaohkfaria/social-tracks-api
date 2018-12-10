@@ -28,6 +28,10 @@ const UserSchema = new Schema({
     type: Schema.Types.Mixed,
     required: false,
   },
+  mastodon_info: {
+    type: Schema.Types.Mixed,
+    required: false,
+  },
 }, {
   timestamps: {
     createdAt: 'created_at',

@@ -3,14 +3,14 @@ import { respondError, errorCodes } from '../services/ErrorsService';
 import {
   validateLoginSpotify,
   getSpotifyUser,
-  getSpotifyArtists,
   getSpotifyTopTracks,
-  getSpotifyLibraryTracks,
 } from '../services/SpotifyService';
 import {
   validateLoginMastodon,
   getMastodonToken,
   getMastodonUser,
+  addMastodonInfoUser,
+  validateUpdateMastodon,
 } from '../services/MastodonService';
 import { createOrUpdateUser, addOrUpdateMastodonOnUser } from '../services/UserService';
 import User from '../models/User';
@@ -70,10 +70,36 @@ export async function loginMastodon(req, res) {
     const mastodonUser = await getMastodonUser(accessToken);
     // Updating user
     const updatedUser = await addOrUpdateMastodonOnUser(user, mastodonUser);
-    console.info(updatedUser);
+    // Adding mastodon info to user
+    const updatedUserWithInfo = await addMastodonInfoUser(updatedUser);
+
+    respondSuccess(req, res, { user: updatedUserWithInfo });
+  } catch (error) {
+    respondError(res, errorCodes.externalResourceError, 'Can\'t connect with Mastodon');
+  }
+}
+
+export async function updateMastodon(req, res) {
+  // Validating params
+  const { query } = req;
+  const errorValidation = validateUpdateMastodon(query);
+  if (errorValidation !== null) {
+    respondError(res, errorCodes.validationError, errorValidation, req);
+    return;
+  }
+
+  // Getting user id
+  const userId = query.user_id;
+
+  try {
+    // Getting user
+    const user = await User.findById(userId);
+    // Adding mastodon info to user
+    const updatedUser = await addMastodonInfoUser(user);
 
     respondSuccess(req, res, { user: updatedUser });
   } catch (error) {
-    respondError(res, errorCodes.externalResourceError, 'Can\'t connect with Mastodon');
+    console.info(error);
+    respondError(res, errorCodes.externalResourceError, 'Can\'t get updated user with mastodon');
   }
 }

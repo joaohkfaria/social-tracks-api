@@ -7,6 +7,7 @@ export const DB = {
 export const MASTODON = {
   CLIENT_KEY: process.env.MASTODON_CLIENT_KEY,
   CLIENT_SECRET: process.env.MASTODON_CLIENT_SECRET,
+  ACCESS_TOKEN: process.env.MASTODON_ACCESS_TOKEN,
   API_URL: 'https://socialtracks.masto.host',
 };
 

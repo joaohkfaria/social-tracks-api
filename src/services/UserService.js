@@ -20,7 +20,7 @@ async function updateUser(spotifyUser, spotifyTopTracks) {
   // Getting params
   const userParams = getUserParams(spotifyUser, spotifyTopTracks);
   // Updating user
-  user.set(userParams).save();
+  await user.set(userParams).save();
 
   return user;
 }
