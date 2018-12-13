@@ -14,6 +14,10 @@ const Recommendation = new Schema({
     type: Schema.Types.ObjectId,
     ref: RecommendationTrack,
   }],
+  influence_factors: {
+    type: Schema.Types.Mixed,
+    required: true,
+  },
 }, {
   timestamps: {
     createdAt: 'created_at',

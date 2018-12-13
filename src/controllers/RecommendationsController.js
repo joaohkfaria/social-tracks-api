@@ -8,7 +8,7 @@ import {
 import Group from '../models/Group';
 import Recommendation from '../models/Recommendation';
 import { getUsersFromGroup } from '../services/UserService';
-import { getSocialResume } from '../services/SocialResume';
+import { getSocialResume, convertInfluenceFactors } from '../services/SocialResume';
 
 export async function getRecommendations(req, res) {
   const { query } = req;
@@ -40,24 +40,34 @@ export async function getRecommendations(req, res) {
     // Responding recommendation to user
     respondSuccess(req, res, { recommendation });
 
-    // Getting recommendation if there's no one saved
-    if (!recommendation) {
-      // Getting users from group
-      const users = await getUsersFromGroup(group);
-      // Getting social resume
-      const socialResume = getSocialResume(users);
-      // Getting recommendations from social tracks
-      const { recommendations } = await getSocialTracksRecommendations(users, socialResume);
-      // Getting spotify songs based on recommendations
-      const recommendationTracks = await generateRecommendationTracks(
-        spotifyAccessToken,
-        recommendations,
-      );
-      // Creating recommendation on DB
-      await Recommendation.create({
-        group,
-        recommendation_tracks: recommendationTracks,
-      });
+    try {
+      // Getting recommendation if there's no one saved
+      if (!recommendation) {
+        // Getting users from group
+        const users = await getUsersFromGroup(group);
+        // Getting social resume
+        const socialResume = getSocialResume(users);
+        // Getting recommendations from social tracks
+        const {
+          recommendations,
+          influence_factors: influenceFactors,
+        } = await getSocialTracksRecommendations(users, socialResume);
+        // Getting spotify songs based on recommendations
+        const recommendationTracks = await generateRecommendationTracks(
+          spotifyAccessToken,
+          recommendations,
+        );
+        // Convert influence factors
+        const convertedInfluenceFactors = await convertInfluenceFactors(influenceFactors);
+        // Creating recommendation on DB
+        await Recommendation.create({
+          group,
+          recommendation_tracks: recommendationTracks,
+          influence_factors: convertedInfluenceFactors,
+        });
+      }
+    } catch (error) {
+      console.info(error);
     }
   } catch (error) {
     respondError(res, errorCodes.databaseError, 'Cant get recommendations from DB');
