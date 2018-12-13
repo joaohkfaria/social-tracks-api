@@ -8,6 +8,7 @@ import {
 import Group from '../models/Group';
 import Recommendation from '../models/Recommendation';
 import { getUsersFromGroup } from '../services/UserService';
+import { getSocialResume } from '../services/SocialResume';
 
 export async function getRecommendations(req, res) {
   const { query } = req;
@@ -24,12 +25,11 @@ export async function getRecommendations(req, res) {
     const spotifyAccessToken = query.spotify_access_token;
     // Getting group
     const group = await Group.findById(groupId);
+    console.info('GROUP', group, groupId);
     if (!group) {
       respondError(res, errorCodes.validationError, 'No group found with this id');
       return;
     }
-    // Getting users from group
-    const users = await getUsersFromGroup(group);
     // Getting recommendation populated
     const recommendation = await Recommendation
       .findOne({ group })
@@ -42,8 +42,12 @@ export async function getRecommendations(req, res) {
 
     // Getting recommendation if there's no one saved
     if (!recommendation) {
+      // Getting users from group
+      const users = await getUsersFromGroup(group);
+      // Getting social resume
+      const socialResume = getSocialResume(users);
       // Getting recommendations from social tracks
-      const { recommendations } = await getSocialTracksRecommendations(users);
+      const { recommendations } = await getSocialTracksRecommendations(users, socialResume);
       // Getting spotify songs based on recommendations
       const recommendationTracks = await generateRecommendationTracks(
         spotifyAccessToken,

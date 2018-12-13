@@ -4,6 +4,8 @@ import {
   validateLoginSpotify,
   getSpotifyUser,
   getSpotifyTopTracks,
+  getSpotifyArtists,
+  getSpotifyLibraryTracks,
 } from '../services/SpotifyService';
 import {
   validateLoginMastodon,
@@ -30,16 +32,16 @@ export async function loginSpotify(req, res) {
     // Getting Spotify User with Access Token
     const spotifyUser = await getSpotifyUser(accessToken);
     // Getting spotify info
-    // const spotifyArtists = await getSpotifyArtists(accessToken);
+    const spotifyArtists = await getSpotifyArtists(accessToken);
     const spotifyTopTracks = await getSpotifyTopTracks(accessToken);
-    // const spotifySavedTracks = await getSpotifyLibraryTracks(accessToken);
+    const spotifySavedTracks = await getSpotifyLibraryTracks(accessToken);
     // console.info(spotifyUser);
     // console.info(spotifyArtists);
     // console.info(spotifyTopTracks);
     // console.info(spotifySavedTracks);
 
     // Creating or updating local user with Spotify data
-    const user = await createOrUpdateUser(spotifyUser, spotifyTopTracks);
+    const user = await createOrUpdateUser(spotifyUser, spotifyTopTracks, spotifyArtists, spotifySavedTracks);
     console.info('CREATED/UPDATED USER:', user);
 
     // Responding data

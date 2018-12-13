@@ -29,7 +29,7 @@ export async function getSpotifyArtists(accessToken) {
   const spotifyApi = new Spotify();
   spotifyApi.setAccessToken(accessToken);
 
-  const artists = await spotifyApi.getFollowedArtists({ limit: 50 });
+  const artists = await spotifyApi.getFollowedArtists({ limit: 1 });
 
   return artists.body;
 }
@@ -50,7 +50,7 @@ export async function getSpotifyLibraryTracks(accessToken) {
   const spotifyApi = new Spotify();
   spotifyApi.setAccessToken(accessToken);
 
-  const { body } = await spotifyApi.getMySavedTracks({ limit: 50 });
+  const { body } = await spotifyApi.getMySavedTracks({ limit: 1 });
   if (!body || !body.items || !body.items.length) throw new Error('No item found Spotify');
 
   return body;

@@ -28,6 +28,18 @@ const UserSchema = new Schema({
     type: Schema.Types.Mixed,
     required: false,
   },
+  spotify_artists: {
+    type: Schema.Types.Mixed,
+    required: false,
+  },
+  spotify_library: {
+    type: Schema.Types.Mixed,
+    required: false,
+  },
+  spotify_user: {
+    type: Schema.Types.Mixed,
+    required: false,
+  },
   mastodon_info: {
     type: Schema.Types.Mixed,
     required: false,

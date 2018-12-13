@@ -19,9 +19,12 @@ export function validateGetRecommendations(params) {
     : null;
 }
 
-export async function getSocialTracksRecommendations(users) {
+export async function getSocialTracksRecommendations(users, socialResume) {
   // Using User as param for get recommendations
-  const params = { users };
+  const params = {
+    users,
+    social_resume: socialResume,
+  };
   // Getting recommendations from social tracks
   const { result } = await request(SOCIAL_TRACKS_URL, POST, 'recommendations/generate', params);
 
