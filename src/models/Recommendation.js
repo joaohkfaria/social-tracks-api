@@ -10,13 +10,17 @@ const Recommendation = new Schema({
     ref: Group,
     required: true,
   },
+  generating_recommendation: {
+    type: Schema.Types.Boolean,
+    required: true,
+  },
   recommendation_tracks: [{
     type: Schema.Types.ObjectId,
     ref: RecommendationTrack,
   }],
   influence_factors: {
     type: Schema.Types.Mixed,
-    required: true,
+    required: false,
   },
 }, {
   timestamps: {

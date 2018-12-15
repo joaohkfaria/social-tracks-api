@@ -96,10 +96,17 @@ export async function updateMastodon(req, res) {
   try {
     // Getting user
     const user = await User.findById(userId);
-    // Adding mastodon info to user
-    const updatedUser = await addMastodonInfoUser(user);
-
-    respondSuccess(req, res, { user: updatedUser });
+    // If the user already has mastodon_info, we can update but respond the user directly
+    if (user.mastodon_info) {
+      respondSuccess(req, res, { user });
+      // Adding mastodon info to user
+      await addMastodonInfoUser(user);
+    } else {
+      // Adding mastodon info to user
+      const updatedUser = await addMastodonInfoUser(user);
+      // Only responding after update
+      respondSuccess(req, res, { user: updatedUser });
+    }
   } catch (error) {
     console.info(error);
     respondError(res, errorCodes.externalResourceError, 'Can\'t get updated user with mastodon');

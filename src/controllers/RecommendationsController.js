@@ -31,18 +31,23 @@ export async function getRecommendations(req, res) {
       return;
     }
     // Getting recommendation populated
-    const recommendation = await Recommendation
+    let recommendation = await Recommendation
       .findOne({ group })
       .sort({ created_at: -1 })
       .populate({ path: 'recommendation_tracks', model: 'RecommendationTrack' })
       .exec();
 
-    // Responding recommendation to user
-    respondSuccess(req, res, { recommendation });
-
     try {
       // Getting recommendation if there's no one saved
       if (!recommendation) {
+        // Creating a pre-recommendation
+        recommendation = await Recommendation.create({
+          group,
+          generating_recommendation: true,
+        });
+        // Responding recommendation to user
+        respondSuccess(req, res, { recommendation });
+
         // Getting users from group
         const users = await getUsersFromGroup(group);
         // Getting social resume
@@ -60,11 +65,15 @@ export async function getRecommendations(req, res) {
         // Convert influence factors
         const convertedInfluenceFactors = await convertInfluenceFactors(influenceFactors);
         // Creating recommendation on DB
-        await Recommendation.create({
+        await recommendation.set({
           group,
+          generating_recommendation: false,
           recommendation_tracks: recommendationTracks,
           influence_factors: convertedInfluenceFactors,
-        });
+        }).save();
+      } else {
+        // Responding recommendation to user
+        respondSuccess(req, res, { recommendation });
       }
     } catch (error) {
       console.info(error);
