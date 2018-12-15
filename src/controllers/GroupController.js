@@ -15,7 +15,8 @@ export async function getGroups(req, res) {
     // Getting params from query
     const userId = query.user_id;
     // Getting groups that user is in
-    const groups = await Group.find({ users: { $in: userId } })
+    const groups = await Group
+      .find({ users: { $in: userId } })
       .populate({ path: 'users', model: 'User' }).exec();
 
     respondSuccess(req, res, { groups });
