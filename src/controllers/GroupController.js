@@ -1,6 +1,6 @@
 import { errorCodes, respondError } from '../services/ErrorsService';
 import { respondSuccess } from '../services/ResponsesService';
-import { validateGetGroups, validateCreateGroups } from '../services/GroupService';
+import { validateGetGroups, validateCreateGroups, validateDeleteGroup } from '../services/GroupService';
 import Group from '../models/Group';
 
 export async function getGroups(req, res) {
@@ -50,5 +50,23 @@ export async function createGroup(req, res) {
 }
 
 export async function deleteGroup(req, res) {
-  respondSuccess(req, res, { deleted: false });
+  const { params } = req;
+  // Validating
+  const errorValidation = validateDeleteGroup(params);
+  if (errorValidation !== null) {
+    respondError(res, errorCodes.validationError, errorValidation, req);
+    return;
+  }
+
+  try {
+    // Getting params
+    const { id: groupId } = params;
+    // Deleting group
+    const group = await Group.deleteOne({ _id: groupId });
+
+    respondSuccess(req, res, { deleted: false, group });
+  } catch (error) {
+    respondError(res, errorCodes.databaseError, 'Cant delete group on DB');
+    console.info(error);
+  }
 }

@@ -26,3 +26,15 @@ export function validateCreateGroups(params) {
     ? createErrorMessageWithJoi(paramsValidation.error)
     : null;
 }
+
+export function validateDeleteGroup(params) {
+  // Creating validation schema
+  const paramsSchema = Joi.object({
+    id: Joi.string().required(),
+  }).required();
+  // Validating params
+  const paramsValidation = paramsSchema.validate(params);
+  return paramsValidation.error
+    ? createErrorMessageWithJoi(paramsValidation.error)
+    : null;
+}
