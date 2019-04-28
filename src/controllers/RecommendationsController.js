@@ -52,25 +52,32 @@ export async function getRecommendations(req, res) {
         const users = await getUsersFromGroup(group);
         // Getting social resume
         const socialResume = getSocialResume(users);
-        // Getting recommendations from social tracks
-        const {
-          recommendations,
-          influence_factors: influenceFactors,
-        } = await getSocialTracksRecommendations(users, socialResume);
-        // Getting spotify songs based on recommendations
-        const recommendationTracks = await generateRecommendationTracks(
-          spotifyAccessToken,
-          recommendations,
-        );
-        // Convert influence factors
-        const convertedInfluenceFactors = await convertInfluenceFactors(influenceFactors);
-        // Creating recommendation on DB
-        await recommendation.set({
-          group,
-          generating_recommendation: false,
-          recommendation_tracks: recommendationTracks,
-          influence_factors: convertedInfluenceFactors,
-        }).save();
+
+        try {
+          // Getting recommendations from social tracks
+          const {
+            recommendations,
+            influence_factors: influenceFactors,
+          } = await getSocialTracksRecommendations(users, socialResume);
+          // Getting spotify songs based on recommendations
+          const recommendationTracks = await generateRecommendationTracks(
+            spotifyAccessToken,
+            recommendations,
+          );
+          // Convert influence factors
+          const convertedInfluenceFactors = await convertInfluenceFactors(influenceFactors);
+          // Creating recommendation on DB
+          await recommendation.set({
+            group,
+            generating_recommendation: false,
+            recommendation_tracks: recommendationTracks,
+            influence_factors: convertedInfluenceFactors,
+          }).save();
+        } catch (error) {
+          console.info(error);
+          // Deleting recommendation because it was not successfully got
+          await recommendation.delete();
+        }
       } else {
         // Responding recommendation to user
         respondSuccess(req, res, { recommendation });
