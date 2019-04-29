@@ -4,7 +4,7 @@ function getUserParams(spotifyUser, spotifyTopTracks, spotifyArtists, spotifyLib
   console.info('SPOTIFY USER', spotifyUser);
   const params = {
     spotify_id: spotifyUser.id,
-    name: spotifyUser.display_name,
+    name: spotifyUser.display_name || spotifyUser.id,
     email: spotifyUser.email,
     avatar_url: spotifyUser.images.length ? spotifyUser.images[0].url : undefined,
     spotify_top_tracks: spotifyTopTracks,
