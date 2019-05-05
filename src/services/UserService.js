@@ -5,7 +5,8 @@ function getUserParams(spotifyUser, spotifyTopTracks, spotifyArtists, spotifyLib
   const params = {
     spotify_id: spotifyUser.id,
     name: spotifyUser.display_name || spotifyUser.id,
-    email: spotifyUser.email,
+    // TODO: Refactor, some users do not have a email on Spotify
+    email: spotifyUser.email || spotifyUser.id,
     avatar_url: spotifyUser.images.length ? spotifyUser.images[0].url : undefined,
     spotify_top_tracks: spotifyTopTracks,
     spotify_artists: spotifyArtists,
@@ -18,7 +19,7 @@ function getUserParams(spotifyUser, spotifyTopTracks, spotifyArtists, spotifyLib
 
 async function updateUser(spotifyUser, spotifyTopTracks, spotifyArtists, spotifyLibrary) {
   // Getting user
-  const user = await User.findOne({ email: spotifyUser.email });
+  const user = await User.findOne({ email: spotifyUser.email || spotifyUser.id });
   if (!user) throw new Error('User not found to update');
   // Getting params
   const userParams = getUserParams(spotifyUser, spotifyTopTracks, spotifyArtists, spotifyLibrary);
