@@ -9,6 +9,7 @@ export const MASTODON = {
   CLIENT_SECRET: process.env.MASTODON_CLIENT_SECRET,
   ACCESS_TOKEN: process.env.MASTODON_ACCESS_TOKEN,
   API_URL: 'https://socialtracks.masto.host',
+  REDIRECT_URL: 'http://localhost:3001/login_mastodon',
 };
 
 export const SPOTIFY = {

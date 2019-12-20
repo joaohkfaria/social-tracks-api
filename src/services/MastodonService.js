@@ -35,7 +35,7 @@ export async function getMastodonToken(authorizationCode) {
     client_secret: MASTODON.CLIENT_SECRET,
     grant_type: 'authorization_code',
     code: authorizationCode,
-    redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+    redirect_uri: MASTODON.REDIRECT_URL,
   };
 
   const response = await request(MASTODON.API_URL, POST, 'oauth/token', params);
