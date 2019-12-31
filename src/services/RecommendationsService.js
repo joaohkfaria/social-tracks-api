@@ -23,7 +23,7 @@ export async function getSocialTracksRecommendations(users, socialResume, coldst
   const params = {
     users,
     social_resume: socialResume,
-    coldstart_id: coldstartUser._id,
+    coldstart_id: coldstartUser.email,
   };
   // Getting recommendations from social tracks
   const { result } = await request(SOCIAL_TRACKS_URL, POST, 'coldstart-recommendations/generate', params);
