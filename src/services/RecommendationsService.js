@@ -9,7 +9,6 @@ export function validateGetRecommendations(params) {
   // Creating validation schema
   const paramsSchema = Joi.object({
     user_id: Joi.string().required(),
-    group_id: Joi.string().required(),
     spotify_access_token: Joi.string().required(),
   }).required();
   // Validating params
@@ -19,14 +18,15 @@ export function validateGetRecommendations(params) {
     : null;
 }
 
-export async function getSocialTracksRecommendations(users, socialResume) {
+export async function getSocialTracksRecommendations(users, socialResume, coldstartUser) {
   // Using User as param for get recommendations
   const params = {
     users,
     social_resume: socialResume,
+    coldstart_id: coldstartUser._id,
   };
   // Getting recommendations from social tracks
-  const { result } = await request(SOCIAL_TRACKS_URL, POST, 'recommendations/generate', params);
+  const { result } = await request(SOCIAL_TRACKS_URL, POST, 'coldstart-recommendations/generate', params);
 
   return result;
 }

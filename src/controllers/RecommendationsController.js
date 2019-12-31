@@ -5,10 +5,10 @@ import {
   getSocialTracksRecommendations,
   generateRecommendationTracks,
 } from '../services/RecommendationsService';
-import Group from '../models/Group';
 import Recommendation from '../models/Recommendation';
-import { getUsersFromGroup } from '../services/UserService';
+import { getAllUsers } from '../services/UserService';
 import { getSocialResume, convertInfluenceFactors } from '../services/SocialResume';
+import User from '../models/User';
 
 export async function getRecommendations(req, res) {
   const { query } = req;
@@ -21,18 +21,13 @@ export async function getRecommendations(req, res) {
 
   try {
     // Getting params
-    const groupId = query.group_id;
+    const coldstartId = query.user_id;
     const spotifyAccessToken = query.spotify_access_token;
-    // Getting group
-    const group = await Group.findById(groupId);
-    console.info('GROUP', group, groupId);
-    if (!group) {
-      respondError(res, errorCodes.validationError, 'No group found with this id');
-      return;
-    }
+    // Getting coldstart user
+    const coldstartUser = await User.findById(coldstartId);
     // Getting recommendation populated
     let recommendation = await Recommendation
-      .findOne({ group })
+      .findOne({ coldstart_user: coldstartUser })
       .sort({ created_at: -1 })
       .populate({ path: 'recommendation_tracks', model: 'RecommendationTrack' })
       .exec();
@@ -42,14 +37,14 @@ export async function getRecommendations(req, res) {
       if (!recommendation) {
         // Creating a pre-recommendation
         recommendation = await Recommendation.create({
-          group,
+          coldstart_user: coldstartUser,
           generating_recommendation: true,
         });
         // Responding recommendation to user
         respondSuccess(req, res, { recommendation });
 
-        // Getting users from group
-        const users = await getUsersFromGroup(group);
+        // Defining the group of users
+        const users = await getAllUsers();
         // Getting social resume
         const socialResume = getSocialResume(users);
 
@@ -58,7 +53,7 @@ export async function getRecommendations(req, res) {
           const {
             recommendations,
             influence_factors: influenceFactors,
-          } = await getSocialTracksRecommendations(users, socialResume);
+          } = await getSocialTracksRecommendations(users, socialResume, coldstartUser);
           // Getting spotify songs based on recommendations
           const recommendationTracks = await generateRecommendationTracks(
             spotifyAccessToken,
@@ -68,7 +63,7 @@ export async function getRecommendations(req, res) {
           const convertedInfluenceFactors = await convertInfluenceFactors(influenceFactors);
           // Creating recommendation on DB
           await recommendation.set({
-            group,
+            coldstart_user: coldstartUser,
             generating_recommendation: false,
             recommendation_tracks: recommendationTracks,
             influence_factors: convertedInfluenceFactors,

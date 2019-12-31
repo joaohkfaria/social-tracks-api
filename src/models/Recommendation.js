@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 import RecommendationTrack from './RecommendationTrack';
-import Group from './Group';
+import User from './User';
 
 const { Schema } = mongoose;
 
 const Recommendation = new Schema({
-  group: {
+  coldstart_user: {
     type: Schema.Types.ObjectId,
-    ref: Group,
+    ref: User,
     required: true,
   },
   generating_recommendation: {

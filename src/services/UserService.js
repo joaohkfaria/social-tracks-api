@@ -68,3 +68,9 @@ export async function getUsersFromGroup(group) {
 
   return users;
 }
+
+export async function getAllUsers() {
+  const users = await User.find();
+
+  return users;
+}
