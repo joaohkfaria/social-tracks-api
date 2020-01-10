@@ -31,6 +31,14 @@ const RecommendationTrack = new Schema({
     type: Number,
     required: true,
   },
+  external_urls: {
+    type: Schema.Types.Mixed,
+    required: false,
+  },
+  preview_url: {
+    type: String,
+    required: false,
+  },
 }, {
   timestamps: {
     createdAt: 'created_at',
