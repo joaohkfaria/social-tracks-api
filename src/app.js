@@ -15,6 +15,9 @@ import MongooseService from './services/MongooseService';
 
 const app = express();
 
+const server = app.listen();
+server.setTimeout(99999999);
+
 // Mongoose connection
 MongooseService.connect();
 
