@@ -18,6 +18,10 @@ const Recommendation = new Schema({
     type: Schema.Types.ObjectId,
     ref: RecommendationTrack,
   }],
+  recommendations_without_influence_tracks: [{
+    type: Schema.Types.ObjectId,
+    ref: RecommendationTrack,
+  }],
   influence_factors: {
     type: Schema.Types.Mixed,
     required: false,

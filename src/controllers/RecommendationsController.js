@@ -30,6 +30,7 @@ export async function getRecommendations(req, res) {
       .findOne({ coldstart_user: coldstartUser })
       .sort({ created_at: -1 })
       .populate({ path: 'recommendation_tracks', model: 'RecommendationTrack' })
+      .populate({ path: 'recommendations_without_influence_tracks', model: 'RecommendationTrack' })
       .exec();
 
     try {
@@ -52,12 +53,17 @@ export async function getRecommendations(req, res) {
           // Getting recommendations from social tracks
           const {
             recommendations,
+            recommendations_without_influence,
             influence_factors: influenceFactors,
           } = await getSocialTracksRecommendations(users, socialResume, coldstartUser);
           // Getting spotify songs based on recommendations
           const recommendationTracks = await generateRecommendationTracks(
             spotifyAccessToken,
-            recommendations,
+            recommendations.slice(0, 5),
+          );
+          const recommendationsWithoutInflunceTracks = await generateRecommendationTracks(
+            spotifyAccessToken,
+            recommendations_without_influence.slice(0, 5),
           );
           // Convert influence factors
           const convertedInfluenceFactors = await convertInfluenceFactors(influenceFactors);
@@ -66,6 +72,7 @@ export async function getRecommendations(req, res) {
             coldstart_user: coldstartUser,
             generating_recommendation: false,
             recommendation_tracks: recommendationTracks,
+            recommendations_without_influence_tracks: recommendationsWithoutInflunceTracks,
             influence_factors: convertedInfluenceFactors,
           }).save();
         } catch (error) {
