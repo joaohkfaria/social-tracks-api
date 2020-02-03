@@ -16,7 +16,7 @@
     "http-errors": "~1.7.1",
     "isomorphic-fetch": "^2.2.1",
     "joi": "^14.3.0",
-    "mongoose": "^5.4.0",
+    "mongoose": "^5.8.11",
     "morgan": "~1.9.1",
     "node-fetch": "^2.3.0",
     "spotify-web-api-node": "^4.0.0"
