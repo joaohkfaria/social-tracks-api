@@ -9,12 +9,14 @@ export const MASTODON = {
   CLIENT_SECRET: process.env.MASTODON_CLIENT_SECRET,
   ACCESS_TOKEN: process.env.MASTODON_ACCESS_TOKEN,
   API_URL: 'https://socialtracks.masto.host',
-  REDIRECT_URL: 'http://localhost:3001/login_mastodon',
+  // REDIRECT_URL: 'http://localhost:3001/login_mastodon',
+  REDIRECT_URL: 'http://social-tracks.tk:3001/login_mastodon',
 };
 
 export const SPOTIFY = {
   TOKEN_URL: 'https://accounts.spotify.com/api/token',
-  REDIRECT_URL: 'http://localhost:3000/users/login_spotify',
+  // REDIRECT_URL: 'http://localhost:3000/users/login_spotify',
+  REDIRECT_URL: 'http://social-tracks.tk:3000/users/login_spotify',
   CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
   CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
   ENCRYPTION_SECRET: process.env.SPOTIFY_ENCRYPTION_SECRET,
