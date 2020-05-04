@@ -5,7 +5,7 @@ import {
   getSocialTracksRecommendations,
   generateRecommendationTracks,
 } from '../services/RecommendationsService';
-import Recommendation from '../models/Recommendation';
+import Recommendation2 from '../models/Recommendation2';
 import { getAllUsers } from '../services/UserService';
 import { getSocialResume, convertInfluenceFactors } from '../services/SocialResume';
 import User from '../models/User';
@@ -26,7 +26,7 @@ export async function getRecommendations(req, res) {
     // Getting coldstart user
     const coldstartUser = await User.findById(coldstartId);
     // Getting recommendation populated
-    let recommendation = await Recommendation
+    let recommendation = await Recommendation2
       .findOne({ coldstart_user: coldstartUser })
       .sort({ created_at: -1 })
       .populate({ path: 'recommendation_tracks', model: 'RecommendationTrack' })
@@ -37,7 +37,7 @@ export async function getRecommendations(req, res) {
       // Getting recommendation if there's no one saved
       if (!recommendation) {
         // Creating a pre-recommendation
-        recommendation = await Recommendation.create({
+        recommendation = await Recommendation2.create({
           coldstart_user: coldstartUser,
           generating_recommendation: true,
         });
