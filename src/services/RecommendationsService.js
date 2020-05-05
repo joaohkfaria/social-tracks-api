@@ -3,7 +3,7 @@ import { createErrorMessageWithJoi } from './ErrorsService';
 import { request, POST } from './NetworkService';
 import { SOCIAL_TRACKS_URL } from '../config';
 import { queryTracks } from './SpotifyService';
-import RecommendationTrack from '../models/RecommendationTrack';
+import RecommendationTrack2 from '../models/RecommendationTrack2';
 
 export function validateGetRecommendations(params) {
   // Creating validation schema
@@ -45,7 +45,7 @@ export async function generateRecommendationTracks(spotifyAccessToken, recommend
     const track = tracks.items[0];
     // Creating new recommendation
     console.info(track);
-    const recommendationTrack = await RecommendationTrack.create({
+    const recommendationTrack = await RecommendationTrack2.create({
       ...track,
       prediction: recommendation.prediction,
     });
