@@ -59,11 +59,11 @@ export async function getRecommendations(req, res) {
           // Getting spotify songs based on recommendations
           const recommendationTracks = await generateRecommendationTracks(
             spotifyAccessToken,
-            recommendations.slice(0, 10),
+            recommendations.slice(0, 20),
           );
           const recommendationsWithoutInflunceTracks = await generateRecommendationTracks(
             spotifyAccessToken,
-            recommendations_without_influence.slice(0, 10),
+            recommendations_without_influence.slice(0, 20),
           );
           // Convert influence factors
           const convertedInfluenceFactors = await convertInfluenceFactors(influenceFactors);
